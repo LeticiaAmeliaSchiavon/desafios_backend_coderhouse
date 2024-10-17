@@ -1,55 +1,61 @@
 class ProductManager {
-    constructor() {
-      this.products = [];
-      this.nextId = 1;
-    }
-  
-    addProduct(product) {
-      const { title, description, price, thumbnail, code, stock } = product;
-      if (!title || !description || !price || !thumbnail || !code || !stock) {
-        console.error('Todos os campos são obrigatórios.');
-        return;
-      }
-  
-      const codeExists = this.products.some(p => p.code === code);
-      if (codeExists) {
-        console.error('O código já existe.');
-        return;
-      }
-  
-      const newProduct = { ...product, id: this.nextId++ };
-      this.products.push(newProduct);
-    }
-  
-    getProductById(id) {
-      const product = this.products.find(p => p.id === id);
-      if (!product) {
-        console.error('Não encontrado');
-        return null;
-      }
-      return product;
-    }
+  constructor() {
+    this.products = [];
+    this.currentId = 1; 
   }
+
   
-  const manager = new ProductManager();
-  manager.addProduct({
-    title: 'Produto 1',
-    description: 'Descrição do Produto 1',
-    price: 100,
-    thumbnail: 'caminho/para/imagem1',
-    code: 'PROD1',
-    stock: 10
-  });
-  
-  manager.addProduct({
-    title: 'Produto 2',
-    description: 'Descrição do Produto 2',
-    price: 200,
-    thumbnail: 'caminho/para/imagem2',
-    code: 'PROD2',
-    stock: 20
-  });
-  
-  console.log(manager.getProductById(1));
-  console.log(manager.getProductById(3));
-  
+  addProduct({ title, description, price, thumbnail, code, stock }) {
+    
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      console.error('Todos os campos são obrigatórios.');
+      return;
+    }
+
+    
+    const codeExists = this.products.some(product => product.code === code);
+    if (codeExists) {
+      console.error(`Erro: O código ${code} já existe.`);
+      return;
+    }
+
+    
+    const newProduct = {
+      id: this.currentId++,
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock
+    };
+
+    
+    this.products.push(newProduct);
+    console.log('Produto adicionado com sucesso:', newProduct);
+  }
+
+ 
+  getProductById(id) {
+    const product = this.products.find(product => product.id === id);
+    if (!product) {
+      console.error('Não encontrado');
+      return;
+    }
+    return product;
+  }
+}
+
+
+const manager = new ProductManager();
+manager.addProduct({
+  title: 'Camiseta',
+  description: 'Camiseta 100% algodão',
+  price: 49.9,
+  thumbnail: 'img/camiseta.jpg',
+  code: 'CAM123',
+  stock: 100
+});
+
+console.log(manager.getProductById(1)); 
+console.log(manager.getProductById(99));
