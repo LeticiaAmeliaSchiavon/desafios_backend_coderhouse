@@ -11,7 +11,7 @@ class ProductManager {
             const data = await fs.promises.readFile(this.path, 'utf-8');
             return JSON.parse(data);
         } catch (error) {
-            if (error.code === 'Não existe') {
+            if (error.code === 'ENOENT') {  // Corrigido para "ENOENT"
                 return [];
             } else {
                 throw error;
@@ -40,7 +40,13 @@ class ProductManager {
 
     async getProductById(id) {
         const products = await this._readFile();
-        return products.find(p => p.id === id);
+        const product = products.find(p => p.id === id);
+        
+        if (!product) {
+            return `Produto com id ${id} não encontrado`;
+        }
+        
+        return product;
     }
 
     async updateProduct(id, updatedProduct) {
@@ -63,7 +69,6 @@ class ProductManager {
 const productManager = new ProductManager(path.join(__dirname, 'products.json'));
 
 (async () => {
-    
     await productManager.addProduct({
         title: 'Camiseta',
         description: 'Camiseta 100% algodão',
@@ -74,10 +79,8 @@ const productManager = new ProductManager(path.join(__dirname, 'products.json'))
     });
     
     console.log(await productManager.getProducts());
-    
     console.log(await productManager.getProductById(1));
 
     await productManager.updateProduct(1, { price: 49.90, stock: 100 });
-
     await productManager.deleteProduct(1);
 })();
