@@ -51,7 +51,7 @@ const manager = new ProductManager();
 manager.addProduct({
   title: 'Camiseta',
   description: 'Camiseta 100% algodão',
-  price: 49.9,
+  price: 49.90,
   thumbnail: 'img/camiseta.jpg',
   code: 'CAM123',
   stock: 100
