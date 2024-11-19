@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const ProductManager = require('./ProductManager');
+const ProductManager = require('../ProductManager');
 
 const app = express();
 const port = 3000;

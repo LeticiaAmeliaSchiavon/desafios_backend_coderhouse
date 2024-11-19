@@ -84,3 +84,5 @@ const productManager = new ProductManager(path.join(__dirname, 'products.json'))
     await productManager.updateProduct(1, { price: 49.90, stock: 100 });
     await productManager.deleteProduct(1);
 })();
+
+module.exports = ProductManager;
