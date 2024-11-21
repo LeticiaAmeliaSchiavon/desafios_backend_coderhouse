@@ -1,66 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos em Tempo Real</title>
-</head>
-<body>
-    <h1>Produtos em Tempo Real</h1>
+<h1>Produtos em Tempo Real</h1>
+<ul id="productList"></ul>
 
-    <ul id="productList">
-       
-    </ul>
+<h2>Adicionar Produto</h2>
+<form id="productForm">
+    <input type="text" name="title" placeholder="Título" required />
+    <input type="number" name="price" placeholder="Preço" required />
+    <input type="text" name="thumbnail" placeholder="URL da imagem" />
+    <input type="text" name="code" placeholder="Código" required />
+    <input type="number" name="stock" placeholder="Estoque" required />
+    <button type="submit">Adicionar</button>
+</form>
 
-    <h2>Adicionar Produto</h2>
-    <form id="productForm">
-        <input type="text" name="title" placeholder="Título" required />
-        <input type="number" name="price" placeholder="Preço" required />
-        <input type="text" name="thumbnail" placeholder="URL da imagem" />
-        <input type="text" name="code" placeholder="Código" required />
-        <input type="number" name="stock" placeholder="Estoque" required />
-        <button type="submit">Adicionar</button>
-    </form>
+<h2>Excluir Produto</h2>
+<form id="deleteForm">
+    <input type="number" name="id" placeholder="ID do Produto" required />
+    <button type="submit">Excluir</button>
+</form>
 
-    <h2>Excluir Produto</h2>
-    <form id="deleteForm">
-        <input type="number" name="id" placeholder="ID do Produto" required />
-        <button type="submit">Excluir</button>
-    </form>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io();
-
-        socket.on('updateProducts', (products) => {
-            const productList = document.getElementById('productList');
-            productList.innerHTML = '';
-            products.forEach(product => {
-                const li = document.createElement('li');
-                li.textContent = `${product.title} - ${product.price} (Estoque: ${product.stock})`;
-                productList.appendChild(li);
-            });
+// Produtos
+    socket.on('updateProducts', (products) => {
+        const productList = document.getElementById('productList');
+        productList.innerHTML = '';
+        products.forEach(product => {
+            const li = document.createElement('li');
+            li.textContent = `${product.title} - ${product.price} (Estoque: ${product.stock})`;
+            productList.appendChild(li);
         });
+    });
 
-        const productForm = document.getElementById('productForm');
-        productForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(productForm);
-            const product = Object.fromEntries(formData.entries());
-            product.price = parseFloat(product.price);
-            product.stock = parseInt(product.stock);
-            socket.emit('newProduct', product);
-            productForm.reset();
-        });
+// Adicionar produto
+    const productForm = document.getElementById('productForm');
+    productForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(productForm);
+        const product = Object.fromEntries(formData.entries());
+        product.price = parseFloat(product.price);
+        product.stock = parseInt(product.stock);
+        socket.emit('newProduct', product);
+        productForm.reset();
+    });
 
-        const deleteForm = document.getElementById('deleteForm');
-        deleteForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(deleteForm);
-            const id = formData.get('id');
-            socket.emit('deleteProduct', id);
-            deleteForm.reset();
-        });
-    </script>
-</body>
-</html>
+// Excluir produto
+    const deleteForm = document.getElementById('deleteForm');
+    deleteForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(deleteForm);
+        const id = formData.get('id');
+        socket.emit('deleteProduct', id);
+        deleteForm.reset();
+    });
+</script>
