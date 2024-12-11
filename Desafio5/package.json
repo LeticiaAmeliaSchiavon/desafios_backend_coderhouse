@@ -1,0 +1,20 @@
+{
+  "name": "meu-projeto",
+  "version": "1.0.0",
+  "description": "Projeto de ecommerce com Node.js, MongoDB e Socket.IO",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
+    "mongoose": "^8.8.4",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
