@@ -2,8 +2,13 @@ const express = require('express');
 const MessageService = require('../dao/mongo/messageService');
 const router = express.Router();
 
+// Renderizar a view "chat.handlebars"
+router.get('/', (req, res) => {
+  res.render('chat'); // Renderiza a página do chat
+});
+
 // Endpoint para obter todas as mensagens
-router.get('/', async (req, res) => {
+router.get('/messages', async (req, res) => {
   try {
     const messages = await MessageService.getAllMessages();
     res.json(messages);
@@ -13,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 // Endpoint para criar uma nova mensagem
-router.post('/', async (req, res) => {
+router.post('/messages', async (req, res) => {
   try {
     const { user, message } = req.body;
     const newMessage = await MessageService.createMessage({ user, message });

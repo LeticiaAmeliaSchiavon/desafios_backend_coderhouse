@@ -4,16 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/chat.js" defer></script>
 </head>
 <body>
   <h1>Chat</h1>
   <div id="messages"></div>
-  <form id="chatForm">
+  <form id="messageForm">
     <input type="text" id="user" placeholder="Seu e-mail" required />
     <input type="text" id="message" placeholder="Sua mensagem" required />
     <button type="submit">Enviar</button>
   </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const messageForm = document.getElementById('messageForm');
+    const messagesDiv = document.getElementById('messages');
+
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('user').value;
+      const message = document.getElementById('message').value;
+      socket.emit('newMessage', { user, message });
+      document.getElementById('message').value = '';
+    });
+
+    socket.on('messages', (messages) => {
+      messagesDiv.innerHTML = '';
+      messages.forEach((msg) => {
+        const div = document.createElement('div');
+        div.innerText = `${msg.user}: ${msg.message}`;
+        messagesDiv.appendChild(div);
+      });
+    });
+  </script>
 </body>
 </html>
