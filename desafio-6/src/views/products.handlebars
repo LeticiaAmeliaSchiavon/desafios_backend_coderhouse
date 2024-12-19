@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Produtos</title>
+</head>
+<body>
+  <h1>Bem-vindo, {{user.email}}!</h1>
+  {{#if user.role}}
+    <p>Seu papel: {{user.role}}</p>
+  {{/if}}
+  <a href="/auth/logout">Logout</a>
+  <h1>Produtos</h1>
+  {{#each products}}
+    <div>
+      <h2>{{this.title}}</h2>
+      <p>{{this.description}}</p>
+      <p>Preço: {{this.price}}</p>
+      <button onclick="addToCart('{{this._id}}')">Adicionar ao Carrinho</button>
+    </div>
+  {{/each}}
+  <div>
+    {{#if hasPrevPage}}
+      <a href="{{prevLink}}">Anterior</a>
+    {{/if}}
+    Página {{page}}
+    {{#if hasNextPage}}
+      <a href="{{nextLink}}">Próxima</a>
+    {{/if}}
+  </div>
+  <script>
+    function addToCart(productId) {
+      // Implementar a lógica para adicionar ao carrinho
+    }
+  </script>
+</body>
+</html>
