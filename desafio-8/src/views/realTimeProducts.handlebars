@@ -1,0 +1,58 @@
+<h1>Produtos em Tempo Real</h1>
+
+<ul id="productList">
+    {{#each products}}
+        <li>{{this.title}} - R$ {{this.price}} (ID: {{this.id}})</li>
+    {{/each}}
+</ul>
+
+<form id="addProductForm">
+    <input type="text" name="title" placeholder="Título" required>
+    <input type="text" name="description" placeholder="Descrição" required>
+    <input type="number" name="price" placeholder="Preço" required>
+    <input type="text" name="thumbnail" placeholder="Imagem" required>
+    <input type="text" name="code" placeholder="Código" required>
+    <input type="number" name="stock" placeholder="Estoque" required>
+    <button type="submit">Adicionar Produto</button>
+</form>
+
+<form id="deleteProductForm">
+    <input type="number" name="id" placeholder="ID do Produto" required>
+    <button type="submit">Deletar Produto</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Atualiza a lista de produtos quando recebe uma atualização do servidor
+    socket.on('updateProducts', (products) => {
+        const productList = document.getElementById('productList');
+        productList.innerHTML = products.map(product => `
+            <li>${product.title} - R$ ${product.price} (ID: ${product.id})</li>
+        `).join('');
+    });
+
+    // Envia um novo produto para o servidor
+    document.getElementById('addProductForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const product = {
+            title: e.target.title.value,
+            description: e.target.description.value,
+            price: parseFloat(e.target.price.value),
+            thumbnail: e.target.thumbnail.value,
+            code: e.target.code.value,
+            stock: parseInt(e.target.stock.value)
+        };
+        socket.emit('addProduct', product);
+        e.target.reset();
+    });
+
+    // Envia um ID de produto para deletar
+    document.getElementById('deleteProductForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = parseInt(e.target.id.value);
+        socket.emit('deleteProduct', id);
+        e.target.reset();
+    });
+</script>

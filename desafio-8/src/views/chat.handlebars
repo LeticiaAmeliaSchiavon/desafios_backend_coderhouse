@@ -1,0 +1,35 @@
+<h1>Chat</h1>
+
+<div id="chatBox">
+    {{#each messages}}
+        <p><strong>{{this.user}}:</strong> {{this.message}}</p>
+    {{/each}}
+</div>
+
+<form id="messageForm">
+    <input type="text" id="user" placeholder="Seu nome" required>
+    <input type="text" id="message" placeholder="Sua mensagem" required>
+    <button type="submit">Enviar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Atualiza as mensagens quando recebe uma atualização do servidor
+    socket.on('updateMessages', (messages) => {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML = messages.map(msg => `
+            <p><strong>${msg.user}:</strong> ${msg.message}</p>
+        `).join('');
+    });
+
+    // Envia uma nova mensagem para o servidor
+    document.getElementById('messageForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = document.getElementById('user').value;
+        const message = document.getElementById('message').value;
+        socket.emit('sendMessage', { user, message });
+        document.getElementById('message').value = '';
+    });
+</script>
