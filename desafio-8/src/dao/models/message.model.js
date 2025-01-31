@@ -1,12 +1,17 @@
-const mongoose = require('mongoose');
+const MessageManagerDB = require('../dao/MessageManagerDB');
 
-const productSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
-    thumbnail: { type: String, required: true },
-    code: { type: String, required: true, unique: true },
-    stock: { type: Number, required: true },
-});
+class MessageService {
+    constructor() {
+        this.messageManager = new MessageManagerDB();
+    }
 
-module.exports = mongoose.model('Product', productSchema);
+    async getMessages() {
+        return await this.messageManager.getMessages();
+    }
+
+    async addMessage(user, message) {
+        return await this.messageManager.addMessage(user, message);
+    }
+}
+
+module.exports = MessageService;

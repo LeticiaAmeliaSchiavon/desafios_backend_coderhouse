@@ -45,7 +45,7 @@ const ensureAuthenticated = (req, res, next) => {
 };
 
 // Rotas de autenticação
-const authRoutes = require('./routes/auth.routes'); // Importação correta
+const authRoutes = require('./routes/auth.routes');
 app.use('/auth', authRoutes);
 
 // Rotas de produtos
