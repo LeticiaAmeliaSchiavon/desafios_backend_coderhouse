@@ -1,0 +1,10 @@
+<h1>Bem-vindo, {{user.email}}!</h1>
+<p>Você é um {{user.role}}.</p>
+
+<ul>
+    {{#each products}}
+        <li>{{this.title}} - R$ {{this.price}} (ID: {{this.id}})</li>
+    {{/each}}
+</ul>
+
+<a href="/auth/logout">Logout</a>
