@@ -22,7 +22,7 @@ router.get('/loggerTest', (req, res) => {
     logger.info('Este é um log de info');
     logger.warn('Este é um log de warning');
     logger.error('Este é um log de error');
-    logger.fatal('Este é um log de fatal');
+    logger.fatal('Este é um log de fatal'); // Agora funciona!
 
     res.send('Logs testados com sucesso!');
 });

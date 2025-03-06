@@ -1,6 +1,16 @@
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, printf, colorize } = format;
 
+// Definindo níveis de log personalizados
+const levels = {
+    fatal: 0,
+    error: 1,
+    warn: 2,
+    info: 3,
+    http: 4,
+    debug: 5,
+};
+
 // Formato do log
 const logFormat = printf(({ level, message, timestamp }) => {
     return `${timestamp} [${level}]: ${message}`;
@@ -8,6 +18,7 @@ const logFormat = printf(({ level, message, timestamp }) => {
 
 // Logger para desenvolvimento
 const devLogger = createLogger({
+    levels, // Usando os níveis personalizados
     level: 'debug', // Log a partir do nível "debug"
     format: combine(
         colorize(), // Adiciona cores ao log no console
@@ -21,6 +32,7 @@ const devLogger = createLogger({
 
 // Logger para produção
 const prodLogger = createLogger({
+    levels, // Usando os níveis personalizados
     level: 'info', // Log a partir do nível "info"
     format: combine(
         timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),

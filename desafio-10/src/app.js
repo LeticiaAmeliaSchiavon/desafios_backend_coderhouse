@@ -16,7 +16,12 @@ const io = new Server(httpServer);
 connectDB();
 
 // Configuração do Handlebars
-app.engine('handlebars', exphbs.engine());
+app.engine('handlebars', exphbs.engine({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true, // Permite acesso a propriedades do protótipo
+        allowProtoMethodsByDefault: true, // Permite acesso a métodos do protótipo
+    },
+}));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
